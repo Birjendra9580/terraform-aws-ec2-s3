@@ -12,6 +12,7 @@ pipeline {
         TF_VAR_subnet_name     = "public1"
         TF_VAR_key_pair_name  = "my-key"
         TF_VAR_s3_bucket_prefix = "terraform-ec2-access"
+        TF_VAR_tags = '{"Environment":"dev","Owner":"Birjendra","Project":"terraform-cicd"}
     }
 
     stages {
