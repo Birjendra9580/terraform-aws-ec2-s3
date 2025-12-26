@@ -4,12 +4,20 @@ pipeline {
         label 'jenkins-agent'
     }
 
+    parameters {
+        choice(
+            name: 'TF_ACTION',
+            choices: ['apply', 'destroy'],
+            description: 'Choose Terraform action'
+        )
+    }
+
     environment {
         TF_IN_AUTOMATION = "true"
         
         AWS_REGION               = "ap-south-1"
         AWS_DEFAULT_REGION       = "ap-south-1"
-        
+
         TF_VAR_aws_region        = "ap-south-1"
         TF_VAR_vpc_name          = "main_vpc"
         TF_VAR_subnet_name       = "public1"
@@ -55,14 +63,21 @@ pipeline {
         }
 
         stage('Terraform Apply') {
-            when {
-                branch 'main'
-            }
             steps {
                 input message: "Approve Terraform Apply?", ok: "Apply"
                 sh '''
                   terraform apply -input=false tfplan
                 '''
+            }
+        }
+
+        stage('Terraform Destroy') {
+            when {
+                expression { params.TF_ACTION == 'destroy' }
+            }
+            steps {
+                input message: "🚨 APPROVE TERRAFORM DESTROY? THIS WILL DELETE RESOURCES!", ok: "Destroy"
+                sh 'terraform destroy -auto-approve'
             }
         }
     }
