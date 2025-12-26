@@ -6,7 +6,10 @@ pipeline {
 
     environment {
         TF_IN_AUTOMATION = "true"
-
+        
+        AWS_REGION               = "ap-south-1"
+        AWS_DEFAULT_REGION       = "ap-south-1"
+        
         TF_VAR_aws_region        = "ap-south-1"
         TF_VAR_vpc_name          = "main_vpc"
         TF_VAR_subnet_name       = "public1"
