@@ -21,9 +21,13 @@ data "aws_subnet" "selected" {
     values = [var.subnet_name]
   }
 
-  vpc_id = data.aws_vpc.selected.id
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
 }
 
 data "aws_key_pair" "existing" {
   key_name = var.key_pair_name
 }
+
